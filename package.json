@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "starti": "rmdir /s /q node_modules & del /f /q package-lock.json & nvm use lts & npm i && npx webpack serve",
     "start": "npx webpack serve"
   },
   "keywords": [],
   "author": "Florin Nutiu",
   "license": "ISC",
   "dependencies": {
+    "copy-webpack-plugin": "^11.0.0",
     "html-webpack-plugin": "^5.5.3",
     "pixi.js": "^7.2.4",
     "ts-loader": "^9.4.4",
