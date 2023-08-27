@@ -4,7 +4,6 @@ import {Constants, Direction, Position} from "../Data/Constants";
 
 export class TankObject {
     sprite: PIXI.Sprite;
-    bullets: BulletObject[] = [];
     position: Position;
     direction: Direction;
     remainingBullets: number = 0;
@@ -31,8 +30,11 @@ export class TankObject {
         }
         this.remainingBullets--;
 
-        const bullet = new BulletObject(this.position, this.direction, this.bulletDamage);
-        this.bullets.push(bullet);
+        let bulletPosition: Position = {
+            x: this.position.x, y: this.position.y
+        };
+        const bullet = new BulletObject(bulletPosition, this.direction, this.bulletDamage);
+        Constants.bulletObjects.push(bullet);
         Constants.app.stage.addChild(bullet.sprite);
     }
 

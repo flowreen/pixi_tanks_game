@@ -74,9 +74,7 @@ export class Scene {
 
         Constants.app.ticker.add(() => {
             // For each tank, update the position of its bullets
-            redTank.bullets.forEach(bullet => bullet.move());
-            blueTank.bullets.forEach(bullet => bullet.move());
-            greenTank.bullets.forEach(bullet => bullet.move());
+            Constants.bulletObjects.forEach(bullet => bullet.move());
         });
     }
 

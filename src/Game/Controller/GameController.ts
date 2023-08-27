@@ -43,7 +43,7 @@ export class GameController {
 
     isCollision(position: Position): boolean {
         // Check against edges of grid
-        if (position.x == -1 || position.x == Constants.GRID_SIZE || position.y == -1 || position.y == Constants.GRID_SIZE) {
+        if (position.x < 0 || position.x >= Constants.GRID_SIZE || position.y < 0 || position.y >= Constants.GRID_SIZE) {
             return true;
         }
         // Check against all walls and hays
