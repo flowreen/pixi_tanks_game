@@ -45,6 +45,7 @@ export class BulletObject {
         if (this.isCollision({
             x: Math.round(this.position.x), y: Math.round(this.position.y),
         })) {
+            // Destroy bullet
             let bulletToRemove = -1;
             // Find current colliding bullet
             for (let i = 0; i < Constants.bulletObjects.length; i++) {
@@ -54,6 +55,7 @@ export class BulletObject {
                 }
             }
             if (bulletToRemove != -1) {
+                // Remove bullet from game scene
                 Constants.bulletObjects.splice(bulletToRemove, 1);
                 Constants.app.stage.removeChild(this.sprite);
             }
@@ -73,6 +75,7 @@ export class BulletObject {
         }
         for (let hay of Constants.hayObjects) { // Assuming hays is an array of hay positions
             if (hay.position.x === position.x && hay.position.y === position.y) {
+                hay.takeDamage(this.damage)
                 return true;
             }
         }

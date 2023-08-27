@@ -14,4 +14,24 @@ export class HayObject {
         this.sprite.width = Constants.BLOCK_SIZE;
         this.sprite.height = Constants.BLOCK_SIZE;
     }
+
+    takeDamage(damage: number) {
+        this.healthRemaining = this.healthRemaining - damage;
+        // Destroy hay
+        if (this.healthRemaining < 0) {
+            let hayToRemove = -1;
+            // Find current hay object
+            for (let i = 0; i < Constants.hayObjects.length; i++) {
+                let hayObject = Constants.hayObjects[i];
+                if (hayObject.position.x == this.position.x && hayObject.position.y == this.position.y) {
+                    hayToRemove = i;
+                }
+            }
+            if (hayToRemove != -1) {
+                // Remove hay from game scene
+                Constants.hayObjects.splice(hayToRemove, 1);
+                Constants.app.stage.removeChild(this.sprite);
+            }
+        }
+    }
 }

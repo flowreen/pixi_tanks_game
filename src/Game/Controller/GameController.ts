@@ -7,10 +7,10 @@ export class GameController {
         document.addEventListener('keydown', (event) => {
             switch (event.code) {
                 case 'KeyR':
-                    this.reloadTank();
+                    this.reloadTankBullets();
                     break;
                 case 'KeyT':
-                    this.assignControlToNextTank();
+                    this.transferControlToNextTank();
                     break;
                 case 'Space':
                     Constants.tankObjects[this.mainTankId].fire();
@@ -100,7 +100,7 @@ export class GameController {
         }
     }
 
-    private assignControlToNextTank() {
+    private transferControlToNextTank() {
         this.assignControl((this.mainTankId + 1) % Constants.tankObjects.length);
     }
 
@@ -112,7 +112,7 @@ export class GameController {
         }
     }
 
-    private reloadTank() {
+    private reloadTankBullets() {
         for (let i = 0; i < Constants.tankObjects.length; i++) {
             let tank = Constants.tankObjects[i];
             tank.reload();
