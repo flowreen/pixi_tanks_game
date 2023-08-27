@@ -7,8 +7,11 @@ export class TankObject {
     bullets: BulletObject[] = [];
     position: Position;
     direction: Direction;
+    remainingBullets: number = 0;
+    maxBullets: number;
+    bulletDamage: number;
 
-    constructor(texture: string, position: Position) {
+    constructor(texture: string, position: Position, maxBullets: number, bulletsDamage: number) {
         this.sprite = PIXI.Sprite.from(texture);
         this.position = position;
         this.direction = Direction.UP;
@@ -16,28 +19,23 @@ export class TankObject {
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
         this.sprite.position.set(this.position.x * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5, this.position.y * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5);
+        this.maxBullets = maxBullets;
+        this.bulletDamage = bulletsDamage;
+        this.reload();
     }
 
     fire(): void {
-        let bulletStartPosition: Position = {...this.position};
-
-        switch (this.direction) {
-            case Direction.UP:
-                bulletStartPosition.y -= 1;
-                break;
-            case Direction.DOWN:
-                bulletStartPosition.y += 1;
-                break;
-            case Direction.LEFT:
-                bulletStartPosition.x -= 1;
-                break;
-            case Direction.RIGHT:
-                bulletStartPosition.x += 1;
-                break;
+        if (this.remainingBullets == 0) {
+            return;
         }
+        this.remainingBullets--;
 
-        const bullet = new BulletObject(bulletStartPosition, this.direction);
+        const bullet = new BulletObject(this.position, this.direction, this.bulletDamage);
         this.bullets.push(bullet);
         Constants.app.stage.addChild(bullet.sprite);
+    }
+
+    reload() {
+        this.remainingBullets = this.maxBullets;
     }
 }

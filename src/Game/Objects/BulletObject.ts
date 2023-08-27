@@ -5,8 +5,9 @@ export class BulletObject {
     sprite: PIXI.Sprite;
     position: Position;
     direction: Direction;
+    damage: number
 
-    constructor(position: Position, direction: Direction) {
+    constructor(position: Position, direction: Direction, damage: number) {
         this.sprite = PIXI.Sprite.from('assets/bullet.png',);
         this.direction = direction;
         this.position = position;
@@ -16,6 +17,7 @@ export class BulletObject {
         this.sprite.height = Constants.BULLET_SIZE;
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
+        this.damage = damage;
     }
 
     move(): void {

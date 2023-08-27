@@ -62,9 +62,9 @@ export class Scene {
     }
 
     protected drawTank(position: Position): void {
-        const redTank = new TankObject('assets/red_tank.png', position);
-        const blueTank = new TankObject('assets/blue_tank.png', position);
-        const greenTank = new TankObject('assets/green_tank.png', position);
+        const redTank = new TankObject('assets/red_tank.png', position, 2, 10);
+        const blueTank = new TankObject('assets/blue_tank.png', position, 3, 20);
+        const greenTank = new TankObject('assets/green_tank.png', position, 1, 25);
 
         this.tankObjects.push(redTank, blueTank, greenTank);
 

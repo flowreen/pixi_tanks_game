@@ -13,6 +13,9 @@ export class GameController {
         document.addEventListener('keydown', (event) => {
             switch (event.code) {
                 case 'KeyR':
+                    this.reloadTank();
+                    break;
+                case 'KeyT':
                     this.assignControlToNextTank();
                     break;
                 case 'Space':
@@ -39,7 +42,12 @@ export class GameController {
         });
     }
 
-    setNewDirection(newDirection: Direction) {
+    assignControlToRandomTank() {
+        let random = Math.floor(Math.random() * 3);
+        this.assignControl(random);
+    }
+
+    private setNewDirection(newDirection: Direction) {
         for (let i = 0; i < this.tankObjects.length; i++) {
             let tank = this.tankObjects[i];
             tank.direction = newDirection;
@@ -47,24 +55,22 @@ export class GameController {
         }
     }
 
-    assignControlToRandomTank() {
-        let random = Math.floor(Math.random() * 3);
-        this.assignControl(random);
+    private assignControlToNextTank() {
+        this.assignControl((this.mainTankId + 1) % this.tankObjects.length);
     }
 
-    assignControlToNextTank() {
-        this.assignControl((this.mainTankId + 1) % this.tankObjects.length)
-    }
-
-    assignControl(newControlledTankId: number) {
+    private assignControl(newControlledTankId: number) {
         this.mainTankId = newControlledTankId;
         for (let i = 0; i < this.tankObjects.length; i++) {
             let tank = this.tankObjects[i];
-            if (i == newControlledTankId) {
-                tank.sprite.visible = true;
-            } else {
-                tank.sprite.visible = false;
-            }
+            tank.sprite.visible = i == newControlledTankId;
+        }
+    }
+
+    private reloadTank() {
+        for (let i = 0; i < this.tankObjects.length; i++) {
+            let tank = this.tankObjects[i];
+            tank.reload();
         }
     }
 }
