@@ -18,7 +18,7 @@ export class HayObject {
     takeDamage(damage: number) {
         this.healthRemaining = this.healthRemaining - damage;
         // Destroy hay
-        if (this.healthRemaining < 0) {
+        if (this.healthRemaining <= 0) {
             let hayToRemove = -1;
             // Find current hay object
             for (let i = 0; i < Constants.hayObjects.length; i++) {
