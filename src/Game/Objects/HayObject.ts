@@ -4,6 +4,7 @@ import {Constants, Position} from "../Data/Constants";
 export class HayObject {
     sprite: PIXI.Sprite;
     position: Position;
+    healthRemaining: number = 100;
 
     constructor(position: Position) {
         this.sprite = PIXI.Sprite.from('assets/hay.png')

@@ -7,9 +7,6 @@ import {GameController} from "../Controller/GameController";
 
 export class Scene {
     occupiedPositions: Position[] = [];
-    hayObjects: HayObject[] = [];
-    wallObjects: HayObject[] = [];
-    tankObjects: TankObject[] = [];
 
     constructor() {
         // Add the app view (canvas) to the document body
@@ -51,13 +48,13 @@ export class Scene {
 
     protected drawHay(position: Position): void {
         const hayObject = new HayObject(position);
-        this.hayObjects.push(hayObject);
+        Constants.hayObjects.push(hayObject);
         Constants.app.stage.addChild(hayObject.sprite);
     }
 
     protected drawWall(position: Position): void {
         const wallObject = new WallObject(position);
-        this.wallObjects.push(wallObject);
+        Constants.wallObjects.push(wallObject);
         Constants.app.stage.addChild(wallObject.sprite);
     }
 
@@ -66,9 +63,9 @@ export class Scene {
         const blueTank = new TankObject('assets/blue_tank.png', position, 3, 20);
         const greenTank = new TankObject('assets/green_tank.png', position, 1, 25);
 
-        this.tankObjects.push(redTank, blueTank, greenTank);
+        Constants.tankObjects.push(redTank, blueTank, greenTank);
 
-        let controller = new GameController(this.tankObjects);
+        let controller = new GameController();
         controller.initializeEventListeners();
         controller.assignControlToRandomTank();
 

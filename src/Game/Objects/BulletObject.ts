@@ -5,10 +5,10 @@ export class BulletObject {
     sprite: PIXI.Sprite;
     position: Position;
     direction: Direction;
-    damage: number
+    damage: number;
 
     constructor(position: Position, direction: Direction, damage: number) {
-        this.sprite = PIXI.Sprite.from('assets/bullet.png',);
+        this.sprite = PIXI.Sprite.from('assets/bullet.png');
         this.direction = direction;
         this.position = position;
         this.sprite.x = position.x * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5;

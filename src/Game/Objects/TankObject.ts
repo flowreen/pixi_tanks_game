@@ -18,6 +18,7 @@ export class TankObject {
         // Set the initial positions
         this.sprite.anchor.x = 0.5;
         this.sprite.anchor.y = 0.5;
+        // add centered anchor sprite offset
         this.sprite.position.set(this.position.x * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5, this.position.y * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5);
         this.maxBullets = maxBullets;
         this.bulletDamage = bulletsDamage;
