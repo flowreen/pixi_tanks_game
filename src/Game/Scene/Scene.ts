@@ -1,17 +1,15 @@
 import * as PIXI from 'pixi.js';
-import {Constants} from "../Data/Constants";
+import {Constants, Position} from "../Data/Constants";
 import {TankObject} from "../Objects/TankObject";
 import {HayObject} from "../Objects/HayObject";
 import {WallObject} from "../Objects/WallObject";
-
-type Position = {
-    x: number; y: number;
-};
+import {GameController} from "../Controller/GameController";
 
 export class Scene {
     occupiedPositions: Position[] = [];
     hayObjects: HayObject[] = [];
     wallObjects: HayObject[] = [];
+    tankObjects: TankObject[] = [];
 
     constructor() {
         // Add the app view (canvas) to the document body
@@ -63,6 +61,28 @@ export class Scene {
         Constants.app.stage.addChild(wallObject.sprite);
     }
 
+    protected drawTank(position: Position): void {
+        const redTank = new TankObject('assets/red_tank.png', position);
+        const blueTank = new TankObject('assets/blue_tank.png', position);
+        const greenTank = new TankObject('assets/green_tank.png', position);
+
+        this.tankObjects.push(redTank, blueTank, greenTank);
+
+        let controller = new GameController(this.tankObjects);
+        controller.initializeEventListeners();
+        controller.assignControlToRandomTank();
+
+        // Add the tank sprites to the stage
+        Constants.app.stage.addChild(redTank.sprite, blueTank.sprite, greenTank.sprite);
+
+        Constants.app.ticker.add(() => {
+            // For each tank, update the position of its bullets
+            redTank.bullets.forEach(bullet => bullet.move());
+            blueTank.bullets.forEach(bullet => bullet.move());
+            greenTank.bullets.forEach(bullet => bullet.move());
+        });
+    }
+
     protected setup(): void {
         // Draw the grid
         this.drawGrid();
@@ -77,37 +97,6 @@ export class Scene {
             this.drawWall(this.getRandomPosition());
         }
 
-        const redTank = new TankObject('assets/red_tank.png', this.getRandomPosition());
-        const blueTank = new TankObject('assets/blue_tank.png', this.getRandomPosition());
-        const greenTank = new TankObject('assets/green_tank.png', this.getRandomPosition());
-
-        // Set their initial positions
-        redTank.sprite.position.set(redTank.position.x * Constants.BLOCK_SIZE, redTank.position.y * Constants.BLOCK_SIZE);
-        blueTank.sprite.position.set(blueTank.position.x * Constants.BLOCK_SIZE, blueTank.position.y * Constants.BLOCK_SIZE);
-        greenTank.sprite.position.set(greenTank.position.x * Constants.BLOCK_SIZE, greenTank.position.y * Constants.BLOCK_SIZE);
-
-        // Add the tank sprites to the stage
-        Constants.app.stage.addChild(redTank.sprite, blueTank.sprite, greenTank.sprite);
-
-        document.addEventListener('keydown', (event) => {
-            switch (event.key) {
-                case 'r':
-                    redTank.fire();
-                    break;
-                case 'b':
-                    blueTank.fire();
-                    break;
-                case 'g':
-                    greenTank.fire();
-                    break;
-            }
-        });
-
-        Constants.app.ticker.add(() => {
-            // For each tank, update the position of its bullets
-            redTank.bullets.forEach(bullet => bullet.move());
-            blueTank.bullets.forEach(bullet => bullet.move());
-            greenTank.bullets.forEach(bullet => bullet.move());
-        });
+        this.drawTank(this.getRandomPosition());
     }
 }

@@ -1,9 +1,5 @@
 import * as PIXI from 'pixi.js';
-import {Constants} from "../Data/Constants";
-
-type Position = {
-    x: number; y: number;
-};
+import {Constants, Position} from "../Data/Constants";
 
 export class HayObject {
     sprite: PIXI.Sprite;
