@@ -1,18 +1,18 @@
 import * as PIXI from 'pixi.js';
-import {BulletObject} from "./BulletObject";
-import {Constants, Direction, Position} from "../Data/Constants";
+import { Bullet } from "./Bullet";
+import { Constants, Direction, Position } from "../Data/Constants";
+import { GridObject } from "./GridObject";
 
-export class TankObject {
+export class Tank extends GridObject {
     sprite: PIXI.Sprite;
-    position: Position;
     direction: Direction;
     remainingBullets: number = 0;
     maxBullets: number;
     bulletDamage: number;
 
     constructor(texture: string, position: Position, maxBullets: number, bulletsDamage: number) {
+        super(position, {walkable: true, destroyable: false})
         this.sprite = PIXI.Sprite.from(texture);
-        this.position = position;
         this.direction = Direction.UP;
         // Set the initial positions
         this.sprite.anchor.x = 0.5;
@@ -21,7 +21,7 @@ export class TankObject {
         this.sprite.position.set(this.position.x * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5, this.position.y * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5);
         this.maxBullets = maxBullets;
         this.bulletDamage = bulletsDamage;
-        this.reload();
+        this.reloadBullets();
     }
 
     fire(): void {
@@ -33,12 +33,12 @@ export class TankObject {
         let bulletPosition: Position = {
             x: this.position.x, y: this.position.y
         };
-        const bullet = new BulletObject(bulletPosition, this.direction, this.bulletDamage);
-        Constants.bulletObjects.push(bullet);
+        const bullet = new Bullet(bulletPosition, this.direction, this.bulletDamage);
+        Constants.bullets.push(bullet);
         Constants.app.stage.addChild(bullet.sprite);
     }
 
-    reload() {
+    reloadBullets() {
         this.remainingBullets = this.maxBullets;
     }
 }

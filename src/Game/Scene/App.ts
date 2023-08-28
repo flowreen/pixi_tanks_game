@@ -1,10 +1,14 @@
 import * as PIXI from 'pixi.js';
-import {Constants} from "../Data/Constants";
-import {Scene} from "./Scene";
+import { Constants } from "../Data/Constants";
+import { Scene } from "./Scene";
 
 export class App {
     constructor() {
-        // Create a new Pixi Application
+        this.initializePixiApp();
+        this.initializeScene();
+    }
+
+    private initializePixiApp() {
         const app = new PIXI.Application({
             width: Constants.BLOCK_SIZE * Constants.GRID_SIZE + 1,
             height: Constants.BLOCK_SIZE * Constants.GRID_SIZE + 1,
@@ -16,11 +20,9 @@ export class App {
         globalThis.__PIXI_APP__ = app;
 
         Constants.app = app;
-
-        this.initializeScene();
     }
 
-    public initializeScene() {
-        let scene = new Scene();
+    private initializeScene() {
+        const scene = new Scene();
     }
 }

@@ -1,12 +1,13 @@
 import * as PIXI from 'pixi.js';
-import {Constants, Position} from "../Data/Constants";
-import {TankObject} from "../Objects/TankObject";
-import {HayObject} from "../Objects/HayObject";
-import {WallObject} from "../Objects/WallObject";
-import {GameController} from "../Controller/GameController";
+import { Constants, Position } from "../Data/Constants";
+import { Tank } from "../Objects/Tank";
+import { Hay } from "../Objects/Hay";
+import { Wall } from "../Objects/Wall";
+import { GameController } from "../Controller/GameController";
+import { Grid } from "../Objects/Grid";
 
 export class Scene {
-    occupiedPositions: Position[] = [];
+    private occupiedPositions: Position[] = [];
 
     constructor() {
         // Add the app view (canvas) to the document body
@@ -16,7 +17,7 @@ export class Scene {
     }
 
     // Function to draw the grid
-    protected drawGrid(): void {
+    private drawGrid(): void {
         const graphics = new PIXI.Graphics();
         graphics.lineStyle(1, 0x000000, 0.5); // Line style: 1px wide, black color, 50% opacity
 
@@ -35,37 +36,38 @@ export class Scene {
         Constants.app.stage.addChild(graphics);
     }
 
-    protected getRandomPosition(): Position {
+    private getRandomPosition(): Position {
         let position: Position;
         do {
             position = {
-                x: Math.floor(Math.random() * Constants.GRID_SIZE), y: Math.floor(Math.random() * Constants.GRID_SIZE)
+                x: Math.floor(Math.random() * Constants.GRID_SIZE),
+                y: Math.floor(Math.random() * Constants.GRID_SIZE)
             };
         } while (this.occupiedPositions.some(p => p.x === position.x && p.y === position.y));
         this.occupiedPositions.push(position);
         return position;
     }
 
-    protected drawHay(position: Position): void {
-        const hayObject = new HayObject(position);
-        Constants.hayObjects.push(hayObject);
+    private drawHay(position: Position): void {
+        const hayObject = new Hay(position);
+        Constants.hays.push(hayObject);
         Constants.app.stage.addChild(hayObject.sprite);
     }
 
-    protected drawWall(position: Position): void {
-        const wallObject = new WallObject(position);
-        Constants.wallObjects.push(wallObject);
+    private drawWall(position: Position): void {
+        const wallObject = new Wall(position);
+        Constants.walls.push(wallObject);
         Constants.app.stage.addChild(wallObject.sprite);
     }
 
-    protected drawTank(position: Position): void {
-        const redTank = new TankObject('assets/red_tank.png', position, 2, 10);
-        const blueTank = new TankObject('assets/blue_tank.png', position, 3, 20);
-        const greenTank = new TankObject('assets/green_tank.png', position, 1, 25);
+    private drawTank(position: Position): void {
+        const redTank = new Tank('assets/red_tank.png', position, 2, 10);
+        const blueTank = new Tank('assets/blue_tank.png', position, 3, 20);
+        const greenTank = new Tank('assets/green_tank.png', position, 1, 25);
 
-        Constants.tankObjects.push(redTank, blueTank, greenTank);
+        Constants.tanks.push(redTank, blueTank, greenTank);
 
-        let controller = new GameController();
+        const controller = new GameController();
         controller.initializeEventListeners();
         controller.assignControlToRandomTank();
 
@@ -74,13 +76,15 @@ export class Scene {
 
         Constants.app.ticker.add(() => {
             // For each tank, update the position of its bullets
-            Constants.bulletObjects.forEach(bullet => bullet.move());
+            Constants.bullets.forEach(bullet => bullet.move());
         });
     }
 
-    protected setup(): void {
+    private setup(): void {
         // Draw the grid
         this.drawGrid();
+
+        Constants.grid = new Grid({ width: Constants.GRID_SIZE, height: Constants.GRID_SIZE });
 
         // Generate and draw 25 hays
         for (let i = 0; i < 25; i++) {
@@ -92,6 +96,15 @@ export class Scene {
             this.drawWall(this.getRandomPosition());
         }
 
+        // Draw the tank
         this.drawTank(this.getRandomPosition());
+
+        // Update the grid with the hay and wall positions
+        for (let i = 0; i < Constants.hays.length; i++) {
+            Constants.grid.getGridObjectByPosition(Constants.hays[i].position).properties = Constants.hays[i].properties;
+        }
+        for (let i = 0; i < Constants.walls.length; i++) {
+            Constants.grid.getGridObjectByPosition(Constants.walls[i].position).properties = Constants.walls[i].properties;
+        }
     }
 }
