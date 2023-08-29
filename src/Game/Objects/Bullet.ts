@@ -21,12 +21,7 @@ export class Bullet extends GridObject {
         this.damage = damage;
     }
 
-    setPosition(position: Position): void {
-        this.sprite.x = position.x * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5;
-        this.sprite.y = position.y * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5;
-    }
-
-    move(): void {
+    public move(): void {
         switch (this.direction) {
             case Direction.UP:
                 this.position.y -= 0.1;
@@ -43,11 +38,18 @@ export class Bullet extends GridObject {
         }
         this.setPosition(this.position);
         if (GameConstants.grid.checkBulletCollision(this.position, this.damage)) {
-            let bulletToRemove = GameConstants.bullets.findIndex(bullet => GameConstants.createPosition(bullet.position.x, bullet.position.y).equals(this.position));
-            if (bulletToRemove!== -1) {
+            let bulletToRemove =
+                GameConstants.bullets.findIndex(
+                    bullet => this.position.x == bullet.position.x && this.position.y == bullet.position.y);
+            if (bulletToRemove !== -1) {
                 GameConstants.bullets.splice(bulletToRemove, 1);
                 GameConstants.app.stage.removeChild(this.sprite);
             }
         }
+    }
+
+    private setPosition(position: Position): void {
+        this.sprite.x = position.x * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5;
+        this.sprite.y = position.y * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5;
     }
 }

@@ -1,87 +1,50 @@
 import { GameConstants } from "../Data/GameConstants";
-import { Direction } from "../Data/GameEnums";
 
 /**
  * The GameController class handles the main game logic.
  */
 export class GameController {
-    mainTankId = 0;
+    private mainTankId = 0;
 
-    handleKeyDown = (event: KeyboardEvent) => {
+    constructor() {
+        this.assignControlToRandomTank();
+    }
+
+    public handleKeyDown(event: KeyboardEvent) {
         switch (event.code) {
             case 'KeyR':
-                this.reloadTankBullets();
+                GameConstants.eventEmitter.emit('reloadBullets');
                 break;
             case 'KeyT':
                 this.transferControlToNextTank();
                 break;
             case 'Space':
-                this.fireMainTank();
+                GameConstants.eventEmitter.emit('fireTank');
                 break;
             case 'KeyW':
             case 'ArrowUp':
-                this.moveTank(Direction.UP);
+                GameConstants.eventEmitter.emit('moveUp');
                 break;
             case 'KeyS':
             case 'ArrowDown':
-                this.moveTank(Direction.DOWN);
+                GameConstants.eventEmitter.emit('moveDown');
                 break;
             case 'KeyA':
             case 'ArrowLeft':
-                this.moveTank(Direction.LEFT);
+                GameConstants.eventEmitter.emit('moveLeft');
                 break;
             case 'KeyD':
             case 'ArrowRight':
-                this.moveTank(Direction.RIGHT);
+                GameConstants.eventEmitter.emit('moveRight');
                 break;
             //... other key events for firing, etc.
         }
-    };
+    }
 
-    assignControlToRandomTank() {
+    private assignControlToRandomTank() {
         const randomIndex = Math.floor(Math.random() * GameConstants.tanks.length);
         this.assignControl(randomIndex);
-    }
-
-    private moveTank(newDirection: Direction) {
-        const mainTank = GameConstants.tanks[this.mainTankId];
-        if (newDirection!== mainTank.direction) {
-            this.setNewDirection(newDirection);
-            return;
-        }
-
-        const newPosition = {...mainTank.position };
-        switch (newDirection) {
-            case Direction.UP:
-                newPosition.y -= 1;
-                break;
-            case Direction.RIGHT:
-                newPosition.x += 1;
-                break;
-            case Direction.DOWN:
-                newPosition.y += 1;
-                break;
-            case Direction.LEFT:
-                newPosition.x -= 1;
-                break;
-        }
-
-        if (GameConstants.grid.isDestinationWalkable(newPosition)) {
-            for (const tank of GameConstants.tanks) {
-                tank.position = newPosition;
-                tank.sprite.position.set(
-                    newPosition.x * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5,
-                    newPosition.y * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5
-                );
-            }
-        }
-    }
-
-    private setNewDirection(newDirection: Direction) {
-        for (const tank of GameConstants.tanks) {
-            tank.direction = newDirection;
-            tank.sprite.angle = 90 * newDirection;
-        }
+        GameConstants.tanks[this.mainTankId].sprite.visible = true;
     }
 
     private transferControlToNextTank() {
@@ -89,21 +52,20 @@ export class GameController {
     }
 
     private assignControl(newControlledTankId: number) {
+        const oldTank = GameConstants.tanks[this.mainTankId];
         this.mainTankId = newControlledTankId;
         for (let i = 0; i < GameConstants.tanks.length; i++) {
-            let tank = GameConstants.tanks[i];
-            tank.sprite.visible = i === newControlledTankId;
-        }
-    }
-
-    private fireMainTank() {
-        const mainTank = GameConstants.tanks[this.mainTankId];
-        mainTank.fire();
-    }
-
-    private reloadTankBullets() {
-        for (const tank of GameConstants.tanks) {
-            tank.reloadBullets();
+            const tank = GameConstants.tanks[i];
+            const isChosenTank = i === this.mainTankId;
+            tank.playerControlled = isChosenTank;
+            tank.sprite.visible = isChosenTank;
+            if (isChosenTank) {
+                tank.position = oldTank.position;
+                tank.direction = oldTank.direction;
+                tank.sprite.x = oldTank.sprite.x;
+                tank.sprite.y = oldTank.sprite.y;
+                tank.sprite.angle = oldTank.sprite.angle
+            }
         }
     }
 }

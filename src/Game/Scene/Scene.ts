@@ -108,7 +108,6 @@ export class Scene {
         }
 
         const gameController = new GameController();
-        gameController.assignControlToRandomTank();
         const eventManager = new EventManager(gameController);
     }
 }

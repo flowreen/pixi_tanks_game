@@ -1,4 +1,4 @@
-enum Direction {
+export enum Direction {
     UP,
     RIGHT,
     DOWN,
@@ -11,5 +11,3 @@ enum Direction {
  */
 class GameEnums {
 }
-
-export {Direction};

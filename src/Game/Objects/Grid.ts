@@ -17,16 +17,16 @@ export class Grid {
         }
     }
 
-    getGridObjectByPosition(position: Position) {
+    public getGridObjectByPosition(position: Position) {
         return this.gridObjects[position.x][position.y];
     }
 
-    freePosition(position: Position) {
+    public freePosition(position: Position) {
         this.getGridObjectByPosition(position).properties.destroyable = false;
         this.getGridObjectByPosition(position).properties.walkable = true;
     }
 
-    checkBulletCollision(bulletPosition: Position, damage: number) {
+    public checkBulletCollision(bulletPosition: Position, damage: number) {
         const newPosition = {x: Math.round(bulletPosition.x), y: Math.round(bulletPosition.y)};
         if (this.isOutOfBounds(newPosition)) {
             return true;
@@ -45,7 +45,7 @@ export class Grid {
         return false;
     }
 
-    isDestinationWalkable(newPosition: Position) {
+    public isDestinationWalkable(newPosition: Position) {
         return !this.isOutOfBounds(newPosition) && !this.isCollision(newPosition);
     }
 

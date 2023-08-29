@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { GameConstants } from "../Data/GameConstants";
 import { Scene } from "./Scene";
+import { EventEmitter } from "events";
 
 /**
  * The App class initializes the PixiJS application and sets up the game.
@@ -9,6 +10,7 @@ import { Scene } from "./Scene";
 export class App {
     constructor() {
         this.initializePixiApp();
+        this.initializeEventEmitter();
         this.initializeScene();
     }
 
@@ -24,6 +26,10 @@ export class App {
         globalThis.__PIXI_APP__ = app;
 
         GameConstants.app = app;
+    }
+
+    private initializeEventEmitter() {
+        GameConstants.eventEmitter = new EventEmitter();
     }
 
     private initializeScene() {

@@ -21,7 +21,7 @@ export class Hay extends GridObject implements TakesDamage {
         this.sprite.y = position.y * GameConstants.BLOCK_SIZE;
     }
 
-    takeDamage(damage: number) {
+    public takeDamage(damage: number) {
         this.healthRemaining -= damage;
         if (this.healthRemaining <= 0) {
             this.destroyHay();
