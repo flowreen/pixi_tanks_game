@@ -5,13 +5,6 @@ import { Wall } from "../Objects/Wall";
 import { Tank } from "../Objects/Tank";
 import { Grid } from "../Objects/Grid";
 
-enum Direction {
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT
-}
-
 type Position = {
     x: number;
     y: number;
@@ -31,7 +24,11 @@ type Size = {
     height: number;
 };
 
-class Constants {
+/**
+ * The EventManager class is responsible for handling all game-related events.
+ * This includes keyboard events for controlling game objects.
+ */
+class GameConstants {
     public static BLOCK_SIZE = 35;
     public static GRID_SIZE = 50;
     public static bullets: Bullet[] = [];
@@ -52,4 +49,4 @@ class Constants {
     }
 }
 
-export { Constants, Direction, Position, Properties, Size };
+export { GameConstants, Position, Properties, Size };

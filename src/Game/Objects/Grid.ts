@@ -1,6 +1,10 @@
 import { GridObject } from "./GridObject";
-import { Constants, Position, Size } from "../Data/Constants";
+import { GameConstants, Position, Size } from "../Data/GameConstants";
 
+/**
+ * The Grid class is responsible for managing the game grid.
+ * It handles grid creation, updates, and collision detection.
+ */
 export class Grid {
     private gridObjects: GridObject[][] = [];
 
@@ -30,7 +34,7 @@ export class Grid {
         if (this.isCollision(newPosition)) {
             const collider = this.getGridObjectByPosition(newPosition);
             if (collider.properties.destroyable) {
-                Constants.hays.forEach((hay) => {
+                GameConstants.hays.forEach((hay) => {
                     if (hay.position.x === newPosition.x && hay.position.y === newPosition.y) {
                         hay.takeDamage(damage);
                     }
@@ -51,6 +55,6 @@ export class Grid {
     }
 
     private isOutOfBounds(position: Position) {
-        return position.x < 0 || position.x >= Constants.GRID_SIZE || position.y < 0 || position.y >= Constants.GRID_SIZE;
+        return position.x < 0 || position.x >= GameConstants.GRID_SIZE || position.y < 0 || position.y >= GameConstants.GRID_SIZE;
     }
 }

@@ -1,7 +1,11 @@
 import * as PIXI from 'pixi.js';
-import { Constants } from "../Data/Constants";
+import { GameConstants } from "../Data/GameConstants";
 import { Scene } from "./Scene";
 
+/**
+ * The App class initializes the PixiJS application and sets up the game.
+ * It is the entry point for the game logic.
+ */
 export class App {
     constructor() {
         this.initializePixiApp();
@@ -10,8 +14,8 @@ export class App {
 
     private initializePixiApp() {
         const app = new PIXI.Application({
-            width: Constants.BLOCK_SIZE * Constants.GRID_SIZE + 1,
-            height: Constants.BLOCK_SIZE * Constants.GRID_SIZE + 1,
+            width: GameConstants.BLOCK_SIZE * GameConstants.GRID_SIZE + 1,
+            height: GameConstants.BLOCK_SIZE * GameConstants.GRID_SIZE + 1,
             backgroundColor: 0xffffff
         });
 
@@ -19,7 +23,7 @@ export class App {
         // @ts-ignore
         globalThis.__PIXI_APP__ = app;
 
-        Constants.app = app;
+        GameConstants.app = app;
     }
 
     private initializeScene() {

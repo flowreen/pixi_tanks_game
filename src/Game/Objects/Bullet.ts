@@ -1,7 +1,12 @@
 import * as PIXI from 'pixi.js';
-import { Constants, Direction, Position } from "../Data/Constants";
+import { GameConstants, Position } from "../Data/GameConstants";
 import { GridObject } from "./GridObject";
+import { Direction } from "../Data/GameEnums";
 
+/**
+ * The Bullet class represents a bullet in the game.
+ * It contains methods for moving the bullet and checking for collisions.
+ */
 export class Bullet extends GridObject {
     sprite: PIXI.Sprite;
     damage: number;
@@ -17,8 +22,8 @@ export class Bullet extends GridObject {
     }
 
     setPosition(position: Position): void {
-        this.sprite.x = position.x * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5;
-        this.sprite.y = position.y * Constants.BLOCK_SIZE + Constants.BLOCK_SIZE * 0.5;
+        this.sprite.x = position.x * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5;
+        this.sprite.y = position.y * GameConstants.BLOCK_SIZE + GameConstants.BLOCK_SIZE * 0.5;
     }
 
     move(): void {
@@ -37,11 +42,11 @@ export class Bullet extends GridObject {
                 break;
         }
         this.setPosition(this.position);
-        if (Constants.grid.checkBulletCollision(this.position, this.damage)) {
-            let bulletToRemove = Constants.bullets.findIndex(bullet => Constants.createPosition(bullet.position.x, bullet.position.y).equals(this.position));
+        if (GameConstants.grid.checkBulletCollision(this.position, this.damage)) {
+            let bulletToRemove = GameConstants.bullets.findIndex(bullet => GameConstants.createPosition(bullet.position.x, bullet.position.y).equals(this.position));
             if (bulletToRemove!== -1) {
-                Constants.bullets.splice(bulletToRemove, 1);
-                Constants.app.stage.removeChild(this.sprite);
+                GameConstants.bullets.splice(bulletToRemove, 1);
+                GameConstants.app.stage.removeChild(this.sprite);
             }
         }
     }
